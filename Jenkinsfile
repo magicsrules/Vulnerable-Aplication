@@ -8,7 +8,7 @@ stages {
       steps {
         script {
           def scannerHome = tool 'sonarqube-scanner';
-          withSonarQubeEnv('sonarqube') {
+          withSonarQubeEnv('sonarqube-scanner') {
             sh "${tool("sonarqube-scanner")}/bin/sonar-scanner -Dsonar.projectKey=dvwa -Dsonar.projectName=DVWA"
           }
         }
