@@ -1,23 +1,25 @@
 pipeline {
     agent any
     environment {
-        projectName = "SonarTest-Scanner"
+        projectName = "dvwa"
     }
 stages {
-    stage ("SonarQube Scan") {
-       steps {
-          withEnv(["PATH="/home/covertech/jenkins_home/workspace/sonarqube-scanner]) {
-             withSonarQubeEnv(installationName: 'covertech_sonarqube_1', credentialsId: 'sonarqubeSecret') {
-               sh "sonar-scanner \
-                 -Dsonar.projectKey=${projectName} \
-                 -Dsonar.sources=. \
-                 -Dsonar.host.url=${env.SONAR_HOST_URL} \
-                 -Dsonar.login=${env.SONAR_AUTH_TOKEN} \
-                 -Dsonar.projectName=${projectName} \
-                 -Dsonar.projectVersion=${env.BUILD_ID}"
-           }
-         }
-       }
-     }
-  }
+    stage('Sonarqube') {
+    environment {
+        scannerHome = tool 'sonarqubescanner'
+    }
+    steps {
+        withSonarQubeEnv('sonarqubeserver') {
+            sh "${scannerHome}/bin/sonar-scanner \
+                 -Dsonar.projectKey=dvwa \
+                 -Dsonar.projectName=DVWA \
+                 -Dsonar.sources=/var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonarqubescanner \
+                 -Dsonar.login=$SONAR_AUTH_TOKEN"
+        }
+        timeout(time: 10, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: false
+            }
+        }
+    }
+}
 }
