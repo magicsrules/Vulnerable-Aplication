@@ -9,7 +9,7 @@ stages {
         script {
           def scannerHome = tool 'sonarqube';
           withSonarQubeEnv('sonarqube') {
-            sh "${tool("sonarqube")}/bin/sonar-scanner -Dsonar.projectKey=dvwa -Dsonar.projectName=DVWA"
+            sh "${tool("sonarqube-scanner")}/bin/sonar-scanner -Dsonar.projectKey=dvwa -Dsonar.projectName=DVWA"
           }
         }
       }
