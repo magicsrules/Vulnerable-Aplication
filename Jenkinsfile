@@ -4,9 +4,9 @@ pipeline {
     stage('SonarQube analysis') {
       steps {
         script {
-          def scannerHome = tool 'SonarQube';
+          def scannerHome = tool 'SonarQubeScanner';
           withSonarQubeEnv('SonarQubeServer') {
-            sh "${tool("SonarQube")}/bin/sonar-scanner -Dsonar.projectKey=dvwa -Dsonar.projectName=DVWA"
+            sh "${tool("SonarQubeScanner")}/bin/sonar-scanner -Dsonar.projectKey=dvwa -Dsonar.projectName=DVWA"
           }
         }
       }
